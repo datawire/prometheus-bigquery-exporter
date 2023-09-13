@@ -1,5 +1,7 @@
+.github
+example
 Dockerfile
 Dockerfile.testing
-prometheus-bigquery-exporter
+Makefile
 README.md
 **/*_test.go

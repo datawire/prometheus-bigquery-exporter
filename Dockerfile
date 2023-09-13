@@ -1,10 +1,12 @@
 FROM golang:1.20 as builder
-ADD . /go/src/github.com/m-lab/prometheus-bigquery-exporter
-WORKDIR /go/src/github.com/m-lab/prometheus-bigquery-exporter
+
+ADD go.mod go.sum /usr/src/prometheus-bigquery-exporter/
+WORKDIR /usr/src/prometheus-bigquery-exporter
+RUN go mod download
+
+ADD . /usr/src/prometheus-bigquery-exporter/
 ENV CGO_ENABLED 0
-RUN go vet && \
-    go get -t . && \
-    go install .
+RUN go install .
 
 FROM alpine:3.15
 COPY --from=builder /go/bin/prometheus-bigquery-exporter /bin/prometheus-bigquery-exporter

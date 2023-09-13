@@ -11,6 +11,21 @@ on:
       - 'main'
 
 jobs:
+  check:
+    runs-on: ubuntu-22.04
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check code
+        run: make vet tidy
+      - name: Check that git is clean
+        run: |
+          git add .
+          if [[ -n "$(git status --porcelain)" ]]; then
+             PAGER= git diff --cached
+             exit 1
+          fi
+
   build_image:
     runs-on: ubuntu-22.04
     steps:
